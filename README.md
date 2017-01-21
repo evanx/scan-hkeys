@@ -42,12 +42,10 @@ docker run --network=host -e pattern='*' scan-hkeys
 ```
 where `--network-host` connects the container to your `localhost` bridge. The default Redis host `localhost` works in that case.
 
-As such, you should inspect the source:
-```shell
-git clone https://github.com/evanx/scan-hkeys.git
-cd hget
-cat Dockerfile
-```
+Since the containerized app has access to the host's Redis instance, you should inspect the source.
+
+see `Dockerfile`
+
 ```
 FROM node:7.4.0
 ADD package.json .
@@ -58,8 +56,9 @@ ENV NODE_ENV production
 CMD ["node", "--harmony", "app/index.js"]
 ```
 
-Having reviewed the code, you can also execute as follows:
+For development, you can run as follows:
 ```
+git clone https://github.com/evanx/scan-hkeys.git
 cat package.json
 npm install
 pattern='*' npm start
