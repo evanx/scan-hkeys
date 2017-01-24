@@ -26,6 +26,6 @@
   docker run --network=test-hkeys-network --name test-hkeys-app \
     -e host=$encipherHost -e port=6333 -e password=$password \
     -e pattern=mytest:*:h evanxsummers/scan-hkeys
-  docker rm -f test-hkeys-redis test-hkeys-app $encipherContainer $deciperContainer 
+  docker rm -f test-hkeys-redis test-hkeys-app test-decipher test-encipher
   docker network rm test-hkeys-network
 )
