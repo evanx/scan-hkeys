@@ -44,7 +44,8 @@ module.exports = (metas, params, options = {}) => Object.keys(metas).map(key => 
         return props;
     } catch (err) {
         console.log([
-            clc.yellow.bold('Options:'),
+            clc.green.bold('Containerized utility to scan Redis keys and print hkeys of any hashes.'),
+            clc.white.bold('Options:'),
             ...Object.keys(metas).map(
                 key => metas[key]
             ).map(

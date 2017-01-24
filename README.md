@@ -28,6 +28,36 @@ where the default Redis `host` is `localhost`
 
 See `app/index.js`
 ```javascript
+    let cursor;
+    while (true) {
+        const [result] = await multiExecAsync(client, multi => {
+            multi.scan(cursor || 0, 'match', config.pattern);
+        });
+        cursor = parseInt(result[0]);
+        const keys = result[1];
+        const types = await multiExecAsync(client, multi => {
+            keys.forEach(key => multi.type(key));
+        });
+        const hashesKeys = keys.filter((key, index) => types[index] === 'hash');
+        if (hashesKeys.length) {
+            count += hashesKeys.length;
+            const results = await multiExecAsync(client, multi => {
+                hashesKeys.forEach(key => multi.hkeys(key));
+            });
+            hashesKeys.forEach((key, index) => {
+                const result = results[index];
+                console.log(`${clc.cyan(key)} ${result.join(' ')}`);
+            });
+```
+
+## Development
+
+For development, you can run as follows:
+```
+git clone https://github.com/evanx/scan-hkeys.git
+cat package.json
+npm install
+pattern='*' npm start
 ```
 
 ## Docker
@@ -56,12 +86,7 @@ ENV NODE_ENV production
 CMD ["node", "--harmony", "app/index.js"]
 ```
 
-For development, you can run as follows:
-```
-git clone https://github.com/evanx/scan-hkeys.git
-cat package.json
-npm install
-pattern='*' npm start
-```
+### Demo script
+
 
 https://twitter.com/@evanxsummers

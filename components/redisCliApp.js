@@ -19,7 +19,8 @@ module.exports = async meta => {
     try {
         const defaults = meta[process.env.NODE_ENV || 'production'];
         const config = reduceMetas(meta.required, process.env, {defaults});
-        const client = redis.createClient(config.redisUrl);
+        const options = lodash.pick(config, 'host', 'port', 'password');
+        const client = redis.createClient(options);
         const logger = require('./redisLogger')(config, redis);
         return {
             assert, lodash, Promise,
