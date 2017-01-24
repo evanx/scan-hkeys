@@ -88,5 +88,37 @@ CMD ["node", "--harmony", "app/index.js"]
 
 ### Demo script
 
+See scripts/demo.sh
+```shell
+docker network create -d bridge test-hkeys-network
+container=`docker run --network=test-hkeys-network \
+  --name test-hkeys-redis -d tutum/redis`
+password=`docker logs $container | grep '^\s*redis-cli -a' |
+  sed -e 's/^\s*redis-cli -a \(\w*\) .*$/\1/'`
+redisHost=`docker inspect $container |
+  grep '"IPAddress":' | tail -1 | sed 's/.*"\([0-9\.]*\)",/\1/'`
+redis-cli -a $password -h $redisHost hset mytest:64:h name 'Pottery Place'
+redis-cli -a $password -h $redisHost hset mytest:64:h address '48 High Street'
+docker run --network=test-hkeys-network \
+  -e host=$redisHost -e password=$password \
+  -e pattern=mytest:*:h evanxsummers/scan-hkeys
+docker rm -f `docker ps -q -f name=test-hkeys-redis`
+docker network rm test-hkeys-network
+```
+where we create an isolated Redis container and use `redis-cli` to create hashes with the following two fields:
+```
+redis-cli -a $password -h $redisHost hset mytest:64:h name 'Pottery Place'
+redis-cli -a $password -h $redisHost hset mytest:64:h address '48 High Street'
+```
+and invoke the utility from the Dockerhub image `evanxsummers/scan-hkeys`
+```
+docker run --network=test-hkeys-network \
+  -e host=$redisHost -e password=$password \
+  -e pattern=mytest:*:h evanxsummers/scan-hkeys
+```
+which prints a line for the key with its two field names from `hkeys`
+```
+mytest:64:h name address
+```
 
 https://twitter.com/@evanxsummers
