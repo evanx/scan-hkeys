@@ -63,7 +63,7 @@ pattern='*' npm start
 ## Docker
 
 ```shell
-docker build -t hget https://github.com/evanx/scan-hkeys.git
+docker build -t scan-hkeys https://github.com/evanx/scan-hkeys.git
 ```
 where tagged as image `scan-hkeys`
 
