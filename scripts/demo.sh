@@ -2,7 +2,7 @@
   set -u -e -x
   docker network create -d bridge test-hkeys-network
   container=`docker run --network=test-hkeys-network \
-    --name test-redis-hkeys -d tutum/redis`
+    --name test-hkeys-redis -d tutum/redis`
   password=`docker logs $container | grep '^\s*redis-cli -a' |
     sed -e 's/^\s*redis-cli -a \(\w*\) .*$/\1/'`
   redisHost=`docker inspect $container |
@@ -12,6 +12,6 @@
   docker run --network=test-hkeys-network \
     -e host=$redisHost -e password=$password \
     -e pattern=mytest:*:h evanxsummers/scan-hkeys
-  docker rm -f `docker ps -q -f name=test-redis-hkeys`
+  docker rm -f `docker ps -q -f name=test-hkeys-redis`
   docker network rm test-hkeys-network
 )
