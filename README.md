@@ -85,7 +85,7 @@ CMD ["node", "lib/index.js"]
 
 ### Demo script
 
-See scripts/demo.sh
+See `scripts/demo.sh`
 ```shell
 docker network create -d bridge test-hkeys-network
 container=`docker run --network=test-hkeys-network \
