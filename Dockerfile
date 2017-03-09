@@ -1,7 +1,6 @@
-FROM node:7.4.0
+FROM mhart/alpine
 ADD package.json .
 RUN npm install --silent
 ADD components components
-ADD app app
-ENV NODE_ENV production
-CMD ["node", "--harmony", "app/index.js"]
+ADD lib lib
+CMD ["node", "--harmony", "lib/index.js"]

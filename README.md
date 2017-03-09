@@ -7,7 +7,7 @@ Containerized utility to scan Redis keys and print hkeys of any hashes.
 
 ## Config
 
-See `app/config.js`
+See `lib/spec.js`
 ```javascript
     pattern: {
         description: 'the matching pattern for Redis scan',
@@ -74,16 +74,13 @@ where `--network-host` connects the container to your `localhost` bridge. The de
 
 Since the containerized app has access to the host's Redis instance, you should inspect the source.
 
-see `Dockerfile`
-
+See `Dockerfile`
 ```
-FROM node:7.4.0
+FROM mhart/alpine
 ADD package.json .
-RUN npm install
-ADD components components
-ADD app app
-ENV NODE_ENV production
-CMD ["node", "--harmony", "app/index.js"]
+RUN npm install --silent
+ADD lib lib
+CMD ["node", "lib/index.js"]
 ```
 
 ### Demo script
