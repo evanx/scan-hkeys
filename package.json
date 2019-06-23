@@ -17,7 +17,7 @@
     "redis-app": "^0.9.16"
   },
   "devDependencies": {
-    "eslint": "^3.12.2"
+    "eslint": "^6.0.0"
   },
   "repository": {
     "type": "git",
